@@ -44,7 +44,8 @@ class Rest extends CI_Controller {
 		}
 		else if($type=='POST')
 		{
-			$this->create($table);
+
+		$data=$this->input->post();
 		}
 	}
 	public function create($table=NULL)
