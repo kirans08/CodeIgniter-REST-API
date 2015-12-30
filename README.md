@@ -1,8 +1,4 @@
-#SNAKE
+#Codeigniter REST API
 
-A Classic snake game built using HTML Canvas and javascript
-
-#INSTRUCTIONS
-
- - Use W A S D for navigation
+A REST api in php created using codeigniter framework 
 

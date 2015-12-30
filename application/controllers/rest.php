@@ -26,7 +26,6 @@ class Rest extends CI_Controller {
 		$seg4 = $this->uri->segment(4, 0);
 		$seg5 = $this->uri->segment(5, 0);
 
-		echo $seg5.' '.$seg4.' '.$seg3.' '.$seg2.' '.$table;
 
 		
 
@@ -43,10 +42,16 @@ class Rest extends CI_Controller {
 
 		}
 		else if($type=='POST')
-		{
 
-		$data=$this->input->post();
-		}
+			$this->create($table);
+		
+		else if($type=='DELETE')
+			
+			$this->delete($table);
+		
+		else if($type=='PATCH'||$type=='PUT')
+
+			$this->update($table);
 	}
 	public function create($table=NULL)
 	{
@@ -68,7 +73,9 @@ class Rest extends CI_Controller {
 	{
 		$this->load->model('crud_model');
 		$key= $this->uri->segment(4, 0);
+		echo $key;
 		$data=$this->input->post();
+		echo $data;
 		if(isset($data['submit']))
 			unset($data['submit']);
 		$this->crud_model->update($table,$key,$data);
