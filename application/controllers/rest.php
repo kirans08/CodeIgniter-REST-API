@@ -74,10 +74,12 @@ class Rest extends CI_Controller {
 	{
 		$this->load->model('crud_model');
 		$key= $this->uri->segment(4, 0);
-		$data=$this->input->input_stream();
+		//$data=$this->input->put();
+		parse_str(file_get_contents("php://input"),$data);
 		if(isset($data['submit']))
 			unset($data['submit']);
-		$this->crud_model->update($table,$key,$data);
+		echo json_encode($data['complete']);
+		//$this->crud_model->update($table,$key,$data);
 
 	}
 	public function delete($table=NULL)
