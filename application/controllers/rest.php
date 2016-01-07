@@ -26,7 +26,6 @@ class Rest extends CI_Controller {
 		$seg4 = $this->uri->segment(4, 0);
 		$seg5 = $this->uri->segment(5, 0);
 
-		echo $seg5.' '.$seg4.' '.$seg3.' '.$seg2.' '.$table;
 
 		
 
@@ -74,12 +73,36 @@ class Rest extends CI_Controller {
 	{
 		$this->load->model('crud_model');
 		$key= $this->uri->segment(4, 0);
-		//$data=$this->input->put();
-		parse_str(file_get_contents("php://input"),$data);
+		$data = array();
+		$input = file_get_contents('php://input');
+		preg_match('/boundary=(.*)$/', $_SERVER['CONTENT_TYPE'], $matches);
+		if (!count($matches))
+		{
+		  parse_str(urldecode($input), $data);
+		  return $data;
+		}
+		$boundary = $matches[1];
+		$a_blocks = preg_split("/-+$boundary/", $input);
+		array_pop($a_blocks);
+		foreach ($a_blocks as $id => $block)
+		{
+		  if (empty($block))
+		    continue;
+		  if (strpos($block, 'application/octet-stream') !== FALSE)
+		  {
+		    preg_match("/name=\"([^\"]*)\".*stream[\n|\r]+([^\n\r].*)?$/s", $block, $matches);
+		    $data['files'][$matches[1]] = $matches[2];
+		  }
+		  else
+		  {
+		    preg_match('/name=\"([^\"]*)\"[\n|\r]+([^\n\r].*)?\r$/s', $block, $matches);
+		    $data[$matches[1]] = $matches[2];
+		  }
+		}
+
 		if(isset($data['submit']))
 			unset($data['submit']);
-		echo json_encode($data['complete']);
-		//$this->crud_model->update($table,$key,$data);
+		$this->crud_model->update($table,$key,$data);
 
 	}
 	public function delete($table=NULL)
@@ -134,6 +157,7 @@ class Rest extends CI_Controller {
 		echo form_close();
 		echo "</body></html>";
 	}
+	
 
 }
 
