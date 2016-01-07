@@ -38,8 +38,8 @@
 |
 */
 
-$route['default_controller'] = "crud";
-$route['crud']='rest/index';
+$route['default_controller'] = "rest";
+$route['rest/(:any)']='rest/index';
 
 
 /* End of file routes.php */

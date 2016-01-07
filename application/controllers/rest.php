@@ -25,20 +25,19 @@ class Rest extends CI_Controller {
 		$seg3 = $this->uri->segment(3, 0);
 		$seg4 = $this->uri->segment(4, 0);
 		$seg5 = $this->uri->segment(5, 0);
-
-
 		
+		$table=$seg2;
 
 		if($type=='GET')
 		{
-			if(!strcasecmp($seg5, 'edit'))
-				$this->updateForm($table);
-			else if(!strcasecmp($seg4, 'new'))
+			if(!strcasecmp($seg4, 'edit'))
+				$this->updateForm($table,$seg3);
+			else if(!strcasecmp($seg3, 'new'))
 				$this->createForm($table);
-			else if($seg4==0)
+			else if($seg3==0)
 				$this->read($table);
 			else
-				$this->read($table,$seg4);
+				$this->read($table,$seg3);
 
 		}
 		else if($type=='POST')
@@ -47,11 +46,11 @@ class Rest extends CI_Controller {
 		
 		else if($type=='DELETE')
 			
-			$this->delete($table);
+			$this->delete($table,$seg3);
 		
 		else if($type=='PATCH'||$type=='PUT')
 
-			$this->update($table);
+			$this->update($table,$seg3);
 	}
 	public function create($table=NULL)
 	{
@@ -61,18 +60,16 @@ class Rest extends CI_Controller {
 			unset($data['submit']);
 		$this->crud_model->create($table,$data);
 	}
-	public function read($table=NULL)
+	public function read($table=NULL,$key=NULL)
 	{
 		$this->load->model('crud_model'); 
-		$key= $this->uri->segment(4, 0);
 		$result=$this->crud_model->read($table,$key);
 		echo json_encode($result);
 
 	}
-	public function update($table=NULL)
+	public function update($table=NULL,$key)
 	{
 		$this->load->model('crud_model');
-		$key= $this->uri->segment(4, 0);
 		$data = array();
 		$input = file_get_contents('php://input');
 		preg_match('/boundary=(.*)$/', $_SERVER['CONTENT_TYPE'], $matches);
@@ -105,11 +102,10 @@ class Rest extends CI_Controller {
 		$this->crud_model->update($table,$key,$data);
 
 	}
-	public function delete($table=NULL)
+	public function delete($table=NULL,$key)
 	{	
 
 		$this->load->model('crud_model');
-		$key= $this->uri->segment(4, 0);
 		$this->crud_model->delete($table,$key);
 
 	}
@@ -134,11 +130,10 @@ class Rest extends CI_Controller {
 		echo form_close();
 		echo "</body></html>";
 	}
-	public function updateForm($table=NULL)
+	public function updateForm($table=NULL,$key)
 	{
 		$this->load->helper('form');
 		$this->load->model('crud_model');
-		$key= $this->uri->segment(4, 0);
 		$attributes=$this->crud_model->updateForm($table,$key);
 		$fields=$this->crud_model->createForm($table);
 		echo "<html><body>";
