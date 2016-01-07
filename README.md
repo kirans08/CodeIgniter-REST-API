@@ -3,8 +3,8 @@
 A REST api in php created using codeigniter framework 
 
 
-HTTP | VERB | PATH FUNCTION
---------------------------------------------------------------
+HTTP VERB | PATH | FUNCTION
+:---------: | :---------------------- | :---------------------
 GET | /index.php/rest/DB_NAME | Retrieve all items as JSON
 GET | /index.php/rest/DB_NAME/id | Retrieve item with id as JSON
 
