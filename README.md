@@ -1,6 +1,6 @@
-#Codeigniter REST API
+# Codeigniter CRUD API
 
-A REST api in php created using codeigniter framework 
+A CRUD API in php created using codeigniter framework 
 
 
 HTTP VERB | PATH | FUNCTION
